@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Entity;
+using Entity.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,19 +40,12 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("registerUser")]
-        public async Task<IActionResult> RegisterUser([FromBody] Users newUser)
+        public async Task<IActionResult> RegisterUser([FromBody] UserDto userDto)
         {
             try
             {
-                var result = await _userService.AddAsync(newUser);
-                if (result == 1)
-                {
-                    return Ok("Completed");
-                }
-                else
-                {
-                    return BadRequest("ERROR OCCURRED");
-                }
+                await _userService.AddAsync(userDto);
+                return Ok(201);
             }
             catch (Exception e)
             {
