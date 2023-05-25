@@ -41,7 +41,7 @@ public class UserManager : IUserService
             new Money
             {
                 UserId = newUser.UserId, 
-                Count = 0.0f,
+                Count = 30,
                 User = newUser
             }
         };
@@ -50,7 +50,7 @@ public class UserManager : IUserService
             new Food
             {
                 UserId = newUser.UserId,
-                Count = 0,
+                Count = 10,
                 User = newUser
             }
         };
