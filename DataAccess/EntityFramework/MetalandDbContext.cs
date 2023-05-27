@@ -18,14 +18,14 @@ public class MetalandDbContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            string constr = "Server=sql.athena.domainhizmetleri.com; Database=mustaf11_proje3; TrustServerCertificate=True; Integrated Security = False; User=mustaf11_sencan;Password=Mustiler463!";
+            string constr = "Server=sql.athena.domainhizmetleri.com,1433; Database=mustaf11_metalandproject; TrustServerCertificate=True; Integrated Security = False; User=mustaf11_sencan;Password=Mustiler463!";
             base.OnConfiguring(optionsBuilder.UseSqlServer(constr));
             Console.WriteLine("Connected");
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("dbo");
+        modelBuilder.HasDefaultSchema("mustaf11_sencan");
         
         modelBuilder.Entity<Users>()
             .HasKey(u => u.UserId);

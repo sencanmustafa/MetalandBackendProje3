@@ -1,9 +1,7 @@
-﻿namespace Entity;
+﻿namespace Entity.Dto;
 
-public class Management: IEntity
+public class ManagementDto
 {
-    public int Id { get; set; }
-    
     public int Type { get; set; }
     public float AdminCost { get; set; }
     public float UserCost { get; set; }

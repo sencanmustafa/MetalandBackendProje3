@@ -9,4 +9,6 @@ public interface IUserService
     public Task<Users> GetUserAsync(int userId);
 
     public Task<Users> CreateNewUser(UserDto userDto);
+    
+    
 }

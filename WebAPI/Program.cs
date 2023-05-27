@@ -1,9 +1,8 @@
+using System.Text.Json.Serialization;
 using Business.Abstract;
 using Business.Concrete;
 using DataAccess;
-using DataAccess.EntityFramework;
-using Entity;
-using Microsoft.AspNetCore.Identity;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +17,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserDal, EfUserDal>();
 builder.Services.AddScoped<IUserService,UserManager>();
 
+builder.Services.AddScoped<IManagementDal,ManagementDal>();
+builder.Services.AddScoped<IManagementService, ManagementManager>();
+
+
+//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+//builder.Services.AddControllers().AddJsonOptions(options =>
+//{
+//    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+//    options.JsonSerializerOptions.WriteIndented = true;
+//});
 
 var app = builder.Build();
 

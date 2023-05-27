@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Business.Abstract;
 using Entity;
 using Entity.Dto;
@@ -15,7 +16,6 @@ namespace WebAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-
         public UserController(IUserService userService)
         {
             _userService = userService;
@@ -49,8 +49,8 @@ namespace WebAPI.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                return BadRequest(e);
+                Console.WriteLine(e.Message);
+                return BadRequest(e.Message);
             }
         }
 
