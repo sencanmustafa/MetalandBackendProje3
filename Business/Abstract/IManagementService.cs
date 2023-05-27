@@ -7,8 +7,8 @@ public interface IManagementService
 {
     public Task CreateManagement(ManagementDto managementDto);
     public Task DeleteManagement(int managementId);
-    public Task RentManagement(int managementId);
-    public Task SellManagement(int managementId);
+    public Task RentManagement(int userId,int managementId);
+    public Task SellManagement(int userId,int managementId);
     
     public Task<Management> CastManagementDto(ManagementDto managementDto);
     

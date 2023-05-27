@@ -25,14 +25,27 @@ public class ManagementManager : IManagementService
         throw new NotImplementedException();
     }
 
-    public Task RentManagement(int managementId)
+    public Task RentManagement(int userId,int managementId)
     {
         throw new NotImplementedException();
     }
 
-    public Task SellManagement(int managementId)
+    public async Task SellManagement(int userId,int managementId)
     {
-        throw new NotImplementedException();
+        var selectedManagement = await _managementDal.GetManagementById(managementId);
+        var sellEntity = await CreateNewSellEntity(userId, selectedManagement);
+        await _managementDal.AddManagementSell(sellEntity);
+    }
+
+    private Task<ManagementSaleRentDetails> CreateNewSellEntity(int userId, Management selectedManagement)
+    {
+        var entity = new ManagementSaleRentDetails()
+        {
+            Management = selectedManagement,
+            ManagementId = selectedManagement.Id,
+            UserId = userId
+        };
+        return Task.FromResult(entity);
     }
 
     public Task<Management> CastManagementDto(ManagementDto managementDto)

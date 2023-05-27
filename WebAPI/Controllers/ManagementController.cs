@@ -38,5 +38,22 @@ namespace WebAPI.Controllers
                 return BadRequest(e);
             }
         }
+
+        [HttpPost]
+        [Route("sellManagementByUserId")]
+        public async Task<IActionResult> SellManagementByUserId([FromBody] SellManagementDto sellManagementDto)
+        {
+            try
+            {
+                
+                await _managementService.SellManagement(sellManagementDto.UserId, sellManagementDto.ManagementId);
+                return Ok(201);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
