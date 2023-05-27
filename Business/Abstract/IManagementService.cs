@@ -11,5 +11,6 @@ public interface IManagementService
     public Task SellManagement(int userId,int managementId);
     
     public Task<Management> CastManagementDto(ManagementDto managementDto);
-    
+
+    public Task<Management> GetManagementAsync(int managementId);
 }

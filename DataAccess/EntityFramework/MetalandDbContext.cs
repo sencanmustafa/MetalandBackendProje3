@@ -36,17 +36,12 @@ public class MetalandDbContext : DbContext
             .HasForeignKey(md => md.ManagementId)
             .OnDelete(DeleteBehavior.Restrict);
         
-        modelBuilder.Entity<Management>()
-            .HasKey(m => m.Id);
-
-        modelBuilder.Entity<Management>()
-            .Property(m => m.Id)
-            .ValueGeneratedOnAdd();
-
-        modelBuilder.Entity<Management>()
-            .Property(m => m.Type)
-            .IsRequired();
-        
+        modelBuilder.Entity<Management>(entity =>
+        {
+            entity.HasKey(m => m.Id);
+            entity.Property(m => m.Id).ValueGeneratedOnAdd();
+            entity.Property(m => m.Type).IsRequired();
+        });
         modelBuilder.Entity<ManagementSaleRentDetails>(entity =>
         {
             entity.HasKey(md => md.Id);

@@ -10,7 +10,7 @@ public class ManagementDal:RepositoryBase<Management,MetalandDbContext>,IManagem
     {
         using (MetalandDbContext context = new MetalandDbContext())
         {
-            var result = await context.Management.FirstOrDefaultAsync(i => i.Id == managementId);
+            var result = await context.Management.SingleOrDefaultAsync(i => i.Id == managementId);
             if (result is not null)
             {
                 return result;
@@ -27,6 +27,7 @@ public class ManagementDal:RepositoryBase<Management,MetalandDbContext>,IManagem
         using (MetalandDbContext context = new MetalandDbContext())
         {
             await context.ManagementSaleRentDetails.AddAsync(management);
+            await context.SaveChangesAsync();
         }
     }
 }

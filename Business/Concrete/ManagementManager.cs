@@ -32,7 +32,7 @@ public class ManagementManager : IManagementService
 
     public async Task SellManagement(int userId,int managementId)
     {
-        var selectedManagement = await _managementDal.GetManagementById(managementId);
+        var selectedManagement = await GetManagementAsync(managementId);
         var sellEntity = await CreateNewSellEntity(userId, selectedManagement);
         await _managementDal.AddManagementSell(sellEntity);
     }
@@ -83,5 +83,11 @@ public class ManagementManager : IManagementService
         }
 
         return Task.FromResult(management);
+    }
+
+    public async Task<Management> GetManagementAsync(int managementId)
+    {
+        var result = await _managementDal.GetAsync(i => i.Id == managementId);
+        return result;
     }
 }
