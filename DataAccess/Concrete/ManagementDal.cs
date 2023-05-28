@@ -24,10 +24,19 @@ public class ManagementDal:RepositoryBase<Management,MetalandDbContext>,IManagem
 
     public async Task AddManagementSell(ManagementSaleRentDetails management)
     {
-        using (MetalandDbContext context = new MetalandDbContext())
+        try
         {
-            await context.ManagementSaleRentDetails.AddAsync(management);
-            await context.SaveChangesAsync();
+            using (MetalandDbContext context = new MetalandDbContext())
+            {
+                await context.ManagementSaleRentDetails.AddAsync(management);
+                await context.SaveChangesAsync();
+            }
         }
+        catch (Exception e)
+        {
+
+            await Console.Out.WriteLineAsync(e.Message);
+        }
+        
     }
 }
