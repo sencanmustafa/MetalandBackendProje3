@@ -37,11 +37,10 @@ public class ManagementManager : IManagementService
         await _managementDal.AddManagementSell(sellEntity);
     }
 
-    private Task<ManagementSaleRentDetails> CreateNewSellEntity(int userId, Management selectedManagement)
+    private Task<ManagementSellRentDetails> CreateNewSellEntity(int userId, Management selectedManagement)
     {
-        var entity = new ManagementSaleRentDetails()
+        var entity = new ManagementSellRentDetails()
         {
-            Management = selectedManagement,
             ManagementId = selectedManagement.Id,
             UserId = userId
         };

@@ -3,7 +3,6 @@
 public class Management: IEntity
 {
     public int Id { get; set; }
-    
     public int Type { get; set; }
     public double AdminCost { get; set; }
     public double UserCost { get; set; }

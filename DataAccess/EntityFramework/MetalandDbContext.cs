@@ -13,7 +13,7 @@ public class MetalandDbContext : DbContext
     public DbSet<Food> Food { get; set; }
     public DbSet<Money> Money { get; set; }
     public DbSet<Stuff> Stuff { get; set; }
-    public DbSet<ManagementSaleRentDetails> ManagementSaleRentDetails { get; set; }
+    public DbSet<ManagementSellRentDetails> ManagementSellRentDetails { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -36,27 +36,14 @@ public class MetalandDbContext : DbContext
             .HasForeignKey(md => md.ManagementId)
             .OnDelete(DeleteBehavior.Restrict);
         
-        modelBuilder.Entity<Management>(entity =>
-        {
-            entity.HasKey(m => m.Id);
-            entity.Property(m => m.Id).ValueGeneratedOnAdd();
-            entity.Property(m => m.Type).IsRequired();
-        });
-        modelBuilder.Entity<ManagementSaleRentDetails>(entity =>
+        modelBuilder.Entity<Management>()
+            .Property(m => m.Id)
+            .ValueGeneratedOnAdd();
+        modelBuilder.Entity<ManagementSellRentDetails>(entity =>
         {
             entity.HasKey(md => md.Id);
             entity.Property(md => md.UserId).IsRequired();
             entity.Property(md => md.ManagementId).IsRequired();
-
-            entity.HasOne(md => md.User)
-                .WithMany()
-                .HasForeignKey(md => md.UserId)
-                .HasConstraintName("FK_ManagementSaleRentDetails_Users");
-
-            entity.HasOne(md => md.Management)
-                .WithMany()
-                .HasForeignKey(md => md.ManagementId)
-                .HasConstraintName("FK_ManagementSaleRentDetails_Management");
         });
         
         modelBuilder.Entity<Area>()
