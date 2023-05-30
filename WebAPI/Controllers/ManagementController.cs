@@ -1,18 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Business.Abstract;
-using Entity;
 using Entity.Dto;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+ 
+    
     public class ManagementController : ControllerBase
     {
         private readonly IManagementService _managementService;
@@ -30,6 +28,7 @@ namespace WebAPI.Controllers
             try
             {
                 await _managementService.CreateManagement(managementDto);
+                Log.Information("Management Created");
                 return Ok();
             }
             catch (Exception e)
@@ -45,8 +44,8 @@ namespace WebAPI.Controllers
         {
             try
             {
-                
                 await _managementService.SellManagement(sellManagementDto.UserId, sellManagementDto.ManagementId);
+                Log.Information($"{sellManagementDto.UserId} bought management");
                 return Ok(201);
             }
             catch (Exception e)
@@ -55,5 +54,6 @@ namespace WebAPI.Controllers
                 return BadRequest(e.Message);
             }
         }
+        
     }
 }

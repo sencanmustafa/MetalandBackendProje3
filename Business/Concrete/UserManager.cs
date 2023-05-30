@@ -1,7 +1,11 @@
-﻿using Business.Abstract;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Business.Abstract;
 using DataAccess;
 using Entity;
 using Entity.Dto;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Business.Concrete;
 
@@ -16,9 +20,9 @@ public class UserManager : IUserService
     }
 
 
-    public async Task AddAsync(UserDto userDto)
+    public async Task AddAsync(UserRegisterDto userRegisterDto)
     {
-        var newUser = await CreateNewUser(userDto);
+        var newUser = await CreateNewUser(userRegisterDto);
         await _userDal.AddAsync(newUser);
     }
 
@@ -28,13 +32,13 @@ public class UserManager : IUserService
         return result;
     }
 
-    public Task<Users> CreateNewUser(UserDto userDto)
+    public Task<Users> CreateNewUser(UserRegisterDto userRegisterDto)
     {
         Users newUser = new Users()
         {
-            Name = userDto.Name,
-            Surname = userDto.Surname,
-            Password = userDto.Password,
+            Name = userRegisterDto.Name,
+            Surname = userRegisterDto.Surname,
+            Password = userRegisterDto.Password,
         };
         newUser.Money = new List<Money>()
         {
@@ -66,4 +70,84 @@ public class UserManager : IUserService
         
         return Task.FromResult(newUser);
     }
+    private const string secretKey = "thisIsA64CharactersLongSecretKeyForHmacShdfgsdfgsdgasdfazsdfasdfasdfgasdfvbasdvzsxdgfvqsf2q34r1234rwertfaxfgbaa512Signature12345";
+    public string CreateAccessToken(Users user)
+    {
+        
+        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            
+        var signingCredential = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);
+
+        var claims = new List<Claim>();
+        claims.Add(new Claim("userId",user.UserId.ToString()));
+        claims.Add(new Claim(ClaimTypes.Role, "standartToken"));
+
+        var tokenHandler = new JwtSecurityToken
+        (
+            issuer: "www.tmCarbon.app",
+            audience: "www.tmCarbon.app",
+            expires : DateTime.UtcNow.AddDays(1000),
+            signingCredentials : signingCredential,
+            claims : claims
+        );
+        var token = new JwtSecurityTokenHandler().WriteToken(tokenHandler);
+
+        return token;
+            
+    }
+    
+    public string CreateAdminAccessToken(Users user)
+    {
+        
+        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            
+        var signingCredential = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);
+
+        var claims = new List<Claim>();
+        claims.Add(new Claim("userId",user.UserId.ToString()));
+        claims.Add(new Claim(ClaimTypes.Role, "admin"));
+
+        var tokenHandler = new JwtSecurityToken
+        (
+            issuer: "www.tmCarbon.app",
+            audience: "www.tmCarbon.app",
+            expires : DateTime.UtcNow.AddDays(1000),
+            signingCredentials : signingCredential,
+            claims : claims
+        );
+        var token = new JwtSecurityTokenHandler().WriteToken(tokenHandler);
+
+        return token;
+            
+    }
+    
+    public string Login(UserLoginDto userLoginDto)
+    {
+        var result = _userDal.GetAsync(x => x.Name == userLoginDto.Name);
+        if (result is null)
+        {
+            return "user not found";
+        }
+
+        if (result.Result.Password!=userLoginDto.Password)
+        {
+            return "wrong credential";
+        }
+
+        if (result.Result.Role == 1)
+        {
+            var adminToken = CreateAdminAccessToken(result.Result);
+            return adminToken;
+        }
+        else
+        {
+            var token = CreateAccessToken(result.Result);
+            return token;
+        }
+        
+
+    }
+
+
+
 }
